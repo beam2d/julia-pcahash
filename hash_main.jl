@@ -46,12 +46,12 @@ function run_pcah(learn_fn::String, base_fn::String, query_fn::String,
         broadcast!(-, learn, learn, mu)
 
         if method == "pca"
-            W, _ = Hash.pca(learn, rank)
+            W, () = Hash.pca(learn, rank)
         elseif method == "rpca"
-            W, _ = Hash.pca(learn, rank)
+            W, () = Hash.pca(learn, rank)
             W *= Hash.randortho(Float32, rank)
         elseif method == "itq"
-            W, _ = Hash.itq(learn, rank)
+            W, () = Hash.itq(learn, rank)
         else
             error("invalid method $method")
         end
