@@ -40,7 +40,7 @@ function itq{T<:Real}(X::Matrix{T}, rank::Int, iterations::Int=50)
     for iter=1:iterations
         B = copysign(B, R * V)
         S, Omega, S_hat = svd(B * V')
-        R = S_hat * S
+        R = S_hat' * S'
     end
     W * R, R * V
 end
