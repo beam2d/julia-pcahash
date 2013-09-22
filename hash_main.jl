@@ -52,6 +52,8 @@ function run_pcah(learn_fn::String, base_fn::String, query_fn::String,
             W *= Hash.randortho(Float32, rank)
         elseif method == "itq"
             W, () = Hash.itq(learn, rank)
+        elseif method == "random"
+            W = randn(size(learn, 1), rank)
         else
             error("invalid method $method")
         end
