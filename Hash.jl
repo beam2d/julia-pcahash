@@ -28,19 +28,18 @@ end
 
 # Computes principal components of a column-wise data matrix.
 function pca(X::Matrix, rank::Int)
-    V, s, U = svd(X')
-    return U'[:, 1:rank], broadcast(*, s[1:rank], V[:, 1:rank]')
+    U, s, V = svd(X)
+    return U[:, 1:rank], broadcast(*, s[1:rank], V[1:rank, :])
 end
 
 # Iterative Quantization from a zero-centered data matrix.
 function itq{T<:Real}(X::Matrix{T}, rank::Int, iterations::Int=50)
     W, V = pca(X, rank)
     R = randortho(T, rank)
-    B = ones(T, (rank, size(X, 2)))
     for iter=1:iterations
-        B = copysign(B, R * V)
-        S, Omega, S_hat = svd(B * V')
-        R = S_hat' * S'
+        B = copysign(1, R * V)
+        S, (), S_hat = svd(B * V')
+        R = S * S_hat
     end
     W * R, R * V
 end
@@ -72,6 +71,7 @@ function scan_hash(Hq::BitMatrix, H::BitMatrix, k::Int)
         end
         neighbors[:, i] = [h[2] for h in sort(heap)]
         print(STDERR, "$i / $(size(Hq, 2))\r")
+        flush(STDERR)
     end
     println(STDERR)
     neighbors
