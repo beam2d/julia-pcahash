@@ -41,7 +41,7 @@ function itq{T<:Real}(X::Matrix{T}, rank::Int, iterations::Int=50)
         S, (), S_hat = svd(B * V')
         R = S * S_hat
     end
-    W * R, R * V
+    W * R, R' * V
 end
 
 hamming_distance(v::BitVector, w::BitVector) =
